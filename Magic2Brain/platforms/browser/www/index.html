@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2016-2017 420Growers Ltd.
+	
+	Product provided AS IT IS with NO WARRANTY.
+	
+	Proprietary code here.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <!--<link rel="stylesheet" type="text/css" href="css/index.css" />-->
+	<link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
+	<link href="css/material-icons.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="fa/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/button.css">
+    <title>Magic2Brain</title>
+</head>
+
+<body ng-app="BlankApp" ng-cloak>
+	
+	<div ng-controller="MenuBarCtrl" ng-cloak>
+		<md-toolbar>
+			<md-fab-actions class="md-toolbar-tools">
+				<div ng-repeat="menupoint in menupoints" flex layout-align="center center" style="text-align: center;">
+					<md-button class="md-icon-button" ng-click="runAction(menupoint.action)" aria-label="{{ menupoint.alabel }}">
+						<i class="fa fa-{{ menupoint.icon }} fa-lg"></i>
+					</md-button>
+				</div>
+			</md-fab-actions>
+		</md-toolbar>
+		
+		<md-sidenav class="md-sidenav-left" md-component-id="left" md-swipe-left="toggleSide()" md-whiteframe="4">
+			<md-toolbar class="md-theme-indigo">
+				<h1 class="md-toolbar-tools">
+				<md-button class="md-icon-button" ng-click="toggleSide()"><i class="fa fa-arrow-left fa-lg"></i></md-button>
+				<md-separator></md-separator>
+				Magic2Brain</h1>
+			</md-toolbar>
+
+			<md-content layout-margin>
+				<form>
+					<md-input-container>
+						<label for="testInput">Search Decks</label>
+						<input type="text" id="testInput" ng-model="decksearch" md-autofocus>
+					</md-input-container>
+				</form>
+				
+				<md-list flex>
+					<md-subheader class="md-no-sticky">Our Compiled Decks</md-subheader>
+					<md-list-item class="md-3-line" ng-click="loadSet()" ng-repeat="item in decklist | filter: decksearch" ng-click="null">
+						<img ng-src="{{item.picture}}?{{$index}}" class="md-avatar" alt="{{item.name}}" />
+						<div class="md-list-item-text" layout="column">
+							<h3>{{ item.name }}</h3>
+							<h4>{{ item.game_type }}</h4>
+							<p>{{ item.deck_synopsis }}</p>
+						</div>
+					</md-list-item>
+				</md-list>
+			</md-content>
+		</md-sidenav>
+		
+		<md-content>
+				<md-subheader class="md-no-sticky">Your last activity</md-subheader>
+				
+				<md-list>
+				  <md-list-item class="md-3-line" ng-repeat="item in decklist">
+					<div class="md-list-item-text">
+					  <h3>{{item.name }}</h3>
+					  <h4>{{item.game_type }}</h4>
+					  <p>{{item.synopsis}}</p>
+					</div>
+					<md-button class="md-secondary md-primary" ng-disabled="true"><i class="fa fa-repeat fa-lg"></i> 2 days</md-button>
+					<md-divider ng-if="!$last"></md-divider>
+				  </md-list-item>
+				</md-list>
+		</md-content>
+	</div>
+	
+	<!-- Cordova -->
+		<script type="text/javascript" src="cordova.js"></script>
+
+	<!-- Angular (v1.5.5) Material requires Angular.js Libraries -->
+		<script src="js/angular.min.js"></script>
+		<script src="js/angular-animate.min.js"></script>
+		<script src="js/angular-aria.min.js"></script>
+		<script src="js/angular-messages.min.js"></script>
+		<script src="js/angular-route.js"></script>
+		<script src="js/angular-material-icons.min.js"></script>
+
+	<!-- Angular (v1.5.5) Material Library -->
+		<script src="js/angular-material.min.js"></script>
+		
+	<!-- JQuery -->
+		<script src="js/jquery-3.1.1.min.js"></script>
+
+	<!-- Local Documents to be included -->
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="js/mb.js"></script>
+
+		<script type="text/javascript">
+			app.initialize();			
+			
+			var ajapp = new angular.module('BlankApp', ['ngMaterial', 'ngMdIcons']);
+			var mb = new MenuBar();
+			mb.make(ajapp);
+			
+			vib();
+			
+			function vib(){
+				navigator.vibrate(1000);
+			}
+		</script>
+</body>
+
+</html>
