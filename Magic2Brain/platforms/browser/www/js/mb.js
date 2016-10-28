@@ -6,35 +6,35 @@ function MenuBar(){
 var file_reader_data;
 
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http) {
+	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog) {
 		$scope.isOpen = false;
 
-		$scope.demo = {
-		isOpen: false,
-		count: 0,
-		selectedDirection: 'left'
+		//Custom errormessage ->> call with $scope.errorMessage(<your error description here>);
+		$scope.errorMessage = function(errorcode) {
+			$mdDialog.show(
+				$mdDialog.alert()
+					.clickOutsideToClose(true)
+					.title('Oops!')
+					.textContent('It looks like something got butched there. I`m apparently caused by: '+errorcode)
+					.ariaLabel('ErrorMessage')
+					.ok('Understood')
+					// You can specify either sting with query selector
+					.openFrom('#left')
+					// or an element
+					.closeTo(angular.element(document.querySelector('#right')))
+			);
 		};
 		
+		//Buttons for the (Top) Menubar
+		
 		var buttons = [
-			{ icon: 'bars', color: '#ffffff', size: '', alabel: 'Menu', action: 'toggleSide'},
+			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'toggleSide'},
 			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: ''},
-			{ icon: 'hdd-o', color: '#ffffff', size: '', alabel: 'View Cached files', action: ''},
-			{ icon: 'share', color: '#ffffff', size: '', alabel: 'Export', action: ''}
+			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: ''},
+			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: ''}
 		];
 		
 		$scope.menupoints = [].concat(buttons);
-		
-		var img_path = 'img/deck_icon.png';
-		var deck_content_path = "content/offline_sets/";
-		
-		var decks_data = [
-			{ picture: img_path, name: 'lea', game_type: 'Modern - 200+ cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'LEA.json'},
-			{ picture: img_path, name: 'leb', game_type: 'Modern - 160 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'LEB.json'},
-			{ picture: img_path, name: 'arn', game_type: 'Modern - 70 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'ARN.json'},
-			{ picture: img_path, name: '2ed', game_type: 'Modern - 365 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'2ED.json'}
-		];
-		
-		$scope.decklist = [].concat(decks_data);
 		
 		$scope.toggleSide = function(){
 			$mdSidenav('left').toggle();
@@ -46,22 +46,54 @@ function makeMenuBar(ajapp){
 			}
 		}
 		
+		//Load LRU Decklist
+		
+		$scope.lastUsedDecks;
+		$scope.loadLastUsedDecks = function(){
+			var list = window.localStorage.getItem("lru_decklist");
+			if(list == undefined){
+				window.localStorage.setItem("lru_decklist", "");
+				list = [];
+			}
+			else{
+				list = JSON.parse(list);
+			}
+			$scope.lastUsedDecks = list;
+		}
+		$scope.updateLastUsedDecks = function(code){
+			var deck = $scope.lastUsedDecks;
+			if(deck.length > 5){
+				deck.splice(-1,1);
+			}
+			var compiled = JSON.stringify(deck);
+			window.localStorage.setItem("lru_decklist", compiled);
+		}
+		
+		$scope.loadLastUsedDecks();
+		
+		//Load Set (Loads a specific set of cards to main list)
 		var setdata;
 
 		$scope.cards;
 		$scope.decks;
 
-		$scope.loadSet = function(setURL) {
+		$scope.loadSet = function(code) {
 
-			$http.get(setURL).success(function(data, status){
+			$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
 				
 				$scope.cards = data.cards;
 			}).error(function (data, status) {
+				$scope.errorMessage("File Request Failed ["+status+"]");
                 $scope.response = 'Request failed';
             });
 			
+			$scope.lastUsedDecks.unshift(code);
+			$scope.updateLastUsedDecks();
+			
 			$scope.toggleSide();
 		}
+		
+		//Load Deck loads a list of avaiable decks to the sidebar
 		
 		$scope.loadDecks = function() {
 
@@ -69,11 +101,14 @@ function makeMenuBar(ajapp){
 				
 				$scope.decks = data;
 			}).error(function (data, status) {
+				
                 $scope.response = 'Request failed';
             });
 		}
 		
 		$scope.loadDecks();
+		
+		//Loads Images for the specific deck (to display in sidebar)
 		
 		$scope.getImage = function(code){
 			return 'img/deck_icon.png';

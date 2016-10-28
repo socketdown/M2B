@@ -7,9 +7,6 @@ var app = {
     },
 
     onDeviceReady: function() {
-        angular.element(document).ready(function() {
-            //angular.bootstrap(document);
-        });
     },
 	
 	loadModules: function(fileList, func){
@@ -59,6 +56,8 @@ function gotFile(fileEntry) {
 
 }
 
+
+//var-dumper
 function dump(obj) {
     var out = '';
     for (var i in obj) {
