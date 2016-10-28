@@ -25,16 +25,13 @@ function makeMenuBar(ajapp){
 		$scope.menupoints = [].concat(buttons);
 		
 		var img_path = 'img/deck_icon.png';
-		
-		/*$http.get('content/offline_sets/LEA.json').success(function(data) {
-		   $scope.deck_lea = data;
-		});*/
+		var deck_content_path = "content/offline_sets/";
 		
 		var decks_data = [
-			{ picture: img_path, name: 'Inistrad', game_type: 'Modern - 200+ cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Kaladesch', game_type: 'Modern - 160 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Dunkelmond', game_type: 'Modern - 70 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Standart', game_type: 'Modern - 365 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'}
+			{ picture: img_path, name: 'lea', game_type: 'Modern - 200+ cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'LEA.json'},
+			{ picture: img_path, name: 'leb', game_type: 'Modern - 160 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'LEB.json'},
+			{ picture: img_path, name: 'arn', game_type: 'Modern - 70 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'ARN.json'},
+			{ picture: img_path, name: '2ed', game_type: 'Modern - 365 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: deck_content_path+'2ED.json'}
 		];
 		
 		$scope.decklist = [].concat(decks_data);
@@ -51,18 +48,35 @@ function makeMenuBar(ajapp){
 		
 		var setdata;
 
-		$scope.loadSet = function() {
+		$scope.cards;
+		$scope.decks;
+
+		$scope.loadSet = function(setURL) {
+
+			$http.get(setURL).success(function(data, status){
+				
+				$scope.cards = data.cards;
+			}).error(function (data, status) {
+                $scope.response = 'Request failed';
+            });
 			
-			$scope.cards;
-			
-			$http.get('content/offline_sets/LEA.json').success(function(data){
-				setdata = data;
-				alert(typeof(data));
-				alert(data.size());
-				//$scope.cards = JSON.parse(data.replace(/\\'/g, "'"));
-			});
-			
-			dump($scope.cards);
+			$scope.toggleSide();
+		}
+		
+		$scope.loadDecks = function() {
+
+			$http.get('content/SetList.json').success(function(data, status){
+				
+				$scope.decks = data;
+			}).error(function (data, status) {
+                $scope.response = 'Request failed';
+            });
+		}
+		
+		$scope.loadDecks();
+		
+		$scope.getImage = function(code){
+			return 'img/deck_icon.png';
 		}
 		
 	});
