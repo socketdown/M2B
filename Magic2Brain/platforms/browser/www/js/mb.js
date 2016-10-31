@@ -84,7 +84,6 @@ function makeMenuBar(ajapp){
 				$scope.cards = data.cards;
 			}).error(function (data, status) {
 				$scope.errorMessage("File Request Failed ["+status+"]");
-                $scope.response = 'Request failed';
             });
 			
 			$scope.lastUsedDecks.unshift(code);
@@ -101,8 +100,7 @@ function makeMenuBar(ajapp){
 				
 				$scope.decks = data;
 			}).error(function (data, status) {
-				
-                $scope.response = 'Request failed';
+				$scope.errorMessage("File Request Failed ["+status+"]");
             });
 		}
 		
