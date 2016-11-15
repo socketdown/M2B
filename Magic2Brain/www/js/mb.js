@@ -1,10 +1,9 @@
 function MenuBar(){
 	this.make = makeMenuBar;
-
 }
 
 var file_reader_data;
-
+var isOptions = true;
 function makeMenuBar(ajapp){
 	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog) {
 		$scope.isOpen = false;
@@ -24,25 +23,29 @@ function makeMenuBar(ajapp){
 					.closeTo(angular.element(document.querySelector('#right')))
 			);
 		};
-		
 		//Buttons for the (Top) Menubar
 		
 		var buttons = [
-			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'toggleSide'},
-			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: ''},
-			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: ''},
-			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: ''}
+			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'loadSearch'},
+			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: 'loadLastSeen'},
+			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: 'loadFavorite'},
+			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: 'loadOptions'}
 		];
 		
 		$scope.menupoints = [].concat(buttons);
 		
 		$scope.toggleSide = function(){
 			$mdSidenav('left').toggle();
-		}
+		}	
 		
 		$scope.runAction = function(command){
-			if(command === 'toggleSide'){
+			var element = document.getElementById("content-wraper");
+			if(command === 'loadSearch'){
 				$scope.toggleSide();
+			}
+			else if(command=== 'loadOptions'){
+				isOptions=false;
+				console.log("triggered");			
 			}
 		}
 		

@@ -45,8 +45,8 @@ objectarray giveFavorite() --> "
 Data Structure:
 
 
-index.html --> opens the splashscreen and the main.js
-main.js --> opens the menubar and loads the content. As default, the last seen tab is opened.
+index.html --> opens the splashscreen, the main.js and incorporates all the includes
+main.html --> opens the menubar and loads the content. As default, the last seen tab is opened.
 configurationfile --> The main configurations can be set in this file.
 options.js --> loaded by main.js and includes all the options
 search.js --> " (maybe already included in main.js)
