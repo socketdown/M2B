@@ -44,8 +44,7 @@ function makeMenuBar(ajapp){
 				$scope.toggleSide();
 			}
 			else if(command=== 'loadOptions'){
-				isOptions=false;
-				console.log("triggered");			
+				$scope.toggleOptionPage();			
 			}
 		}
 		
@@ -111,9 +110,42 @@ function makeMenuBar(ajapp){
 		
 		//Loads Images for the specific deck (to display in sidebar)
 		
-		$scope.getImage = function(code){
-			return 'img/deck_icon.png';
+		$scope.getManaImages = function(code){
+			if (code === null || code == "") {
+				return "";
+			}
+
+			var codes = code.replace(/{|}/g, "");
+			var paths = '{"W": "W.svg.png", "B": "B.svg.png", "C": "C.svg.png", "G": "G.svg.png", "R": "R.svg.png", "U": "U.svg.png"}';
+			paths = JSON.parse(paths);
+
+			var imageArray = [];
+
+			codes = codes.split("");
+
+			for (var i = 0; i < codes.length; i++) {
+				if (isNaN(codes[i]) == true) {
+					imageArray.push({"path":'img/' + paths[codes[i]], "isImage":true});
+				}
+				else{
+				imageArray.push({"path":codes[i], "isImage":false});
+				}
+			}
+
+			return imageArray;
 		}
 		
+		$scope.isOptionScreen = false;
+		$scope.isCardPreviewScreen = true;
+		$scope.isFavouritesScreen = false;
+		$scope.isGreetingScreen = false;
+		
+		$scope.toggleOptionPage = function(){
+			
+			$scope.isOptionScreen = true;
+			$scope.isCardPreviewScreen = false;
+			$scope.isFavouritesScreen = false;
+			$scope.isGreetingScreen = false;
+		}
 	});
 }

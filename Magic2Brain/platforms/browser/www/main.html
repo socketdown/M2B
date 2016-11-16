@@ -11,5 +11,6 @@
 		
 	<!--INCLUDES-->
 	<div ng-include="'searchbar.html'"></div>
-	<div ng-hide="isOptions" ng-include="'options.html'"></div>
+	<div ng-if="isOptionScreen" ng-include="'options.html'"></div>
+	<div ng-if="isCardPreviewScreen" ng-include="'search.html'"></div>
 </div>

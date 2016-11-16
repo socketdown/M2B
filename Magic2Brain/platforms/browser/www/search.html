@@ -17,7 +17,7 @@
 		  <md-list-item class="md-3-line" ng-repeat="item in cards">
 			<div class="md-list-item-text">
 			  <h3>{{item.name}}</h3>
-			  <h4>{{item.manaCost}}</h4>
+			  <h4><span ng-repeat="pic in getManaImages(item.manaCost)"><span ng-if="!pic.isImage">{{pic.path}}</span><img ng-src="{{pic.path}}" ng-if="pic.isImage"/></span></h4>
 			  <p>{{item.type}}</p>
 			</div>
 			<md-button class="md-secondary md-primary" ng-disabled="true"><i class="fa fa-repeat fa-lg"></i> 2 days</md-button>

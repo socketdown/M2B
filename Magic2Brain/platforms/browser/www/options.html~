@@ -1,5 +1,0 @@
-<div ng-hide="isOptions">
-	<md-content>
-		<h1>OPTIONS</h1>
-	</md-content>
-</div>
