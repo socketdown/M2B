@@ -112,5 +112,49 @@ function makeMenuBar(ajapp){
 			return 'img/deck_icon.png';
 		}
 		
+		$scope.getVisualMana = function(code){
+			
+			if (code === null) {
+				return "";
+			}
+
+			var codes = code.replace(/{|}/g, "");
+			var returnString = "";
+			codes = codes.split("");
+
+			for (var i = 0; i < codes.length; i++) {
+				if (isNaN(codes[i]) == false) {
+					returnString += codes[i];
+				}
+			}
+
+			return returnString;
+		}
+		
+		$scope.getManaImages = function(code){
+			if (code === null) {
+				return "";
+			}
+
+			var codes = code.replace(/{|}/g, "");
+			var paths = '{"W": "W.svg.png", "B": "B.svg.png", "C": "C.svg.png", "G": "G.svg.png", "R": "R.svg.png", "U": "U.svg.png"}';
+			paths = JSON.parse(paths);
+
+			var imageArray = [];
+
+			codes = codes.split("");
+
+			for (var i = 0; i < codes.length; i++) {
+				if (isNaN(codes[i]) == true) {
+					imageArray.push({"path":'img/' + paths[codes[i]], "isImage":true, "isText":false});
+				}
+				else{
+				imageArray.push({"path":codes[i], "isImage":false, "isText": true});
+				}
+			}
+
+			return imageArray;
+		}
+		
 	});
 }
