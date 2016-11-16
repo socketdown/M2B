@@ -84,7 +84,6 @@ function makeMenuBar(ajapp){
 				$scope.cards = data.cards;
 			}).error(function (data, status) {
 				$scope.errorMessage("File Request Failed ["+status+"]");
-                $scope.response = 'Request failed';
             });
 			
 			$scope.lastUsedDecks.unshift(code);
@@ -101,8 +100,7 @@ function makeMenuBar(ajapp){
 				
 				$scope.decks = data;
 			}).error(function (data, status) {
-				
-                $scope.response = 'Request failed';
+				$scope.errorMessage("File Request Failed ["+status+"]");
             });
 		}
 		
@@ -112,6 +110,50 @@ function makeMenuBar(ajapp){
 		
 		$scope.getImage = function(code){
 			return 'img/deck_icon.png';
+		}
+		
+		$scope.getVisualMana = function(code){
+			
+			if (code === null) {
+				return "";
+			}
+
+			var codes = code.replace(/{|}/g, "");
+			var returnString = "";
+			codes = codes.split("");
+
+			for (var i = 0; i < codes.length; i++) {
+				if (isNaN(codes[i]) == false) {
+					returnString += codes[i];
+				}
+			}
+
+			return returnString;
+		}
+		
+		$scope.getManaImages = function(code){
+			if (code === null) {
+				return "";
+			}
+
+			var codes = code.replace(/{|}/g, "");
+			var paths = '{"W": "W.svg.png", "B": "B.svg.png", "C": "C.svg.png", "G": "G.svg.png", "R": "R.svg.png", "U": "U.svg.png"}';
+			paths = JSON.parse(paths);
+
+			var imageArray = [];
+
+			codes = codes.split("");
+
+			for (var i = 0; i < codes.length; i++) {
+				if (isNaN(codes[i]) == true) {
+					imageArray.push({"path":'img/' + paths[codes[i]], "isImage":true, "isText":false});
+				}
+				else{
+				imageArray.push({"path":codes[i], "isImage":false, "isText": true});
+				}
+			}
+
+			return imageArray;
 		}
 		
 	});
