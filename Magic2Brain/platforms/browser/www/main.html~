@@ -1,0 +1,15 @@
+<div ng-controller="MenuBarCtrl" ng-cloak>
+	<md-toolbar>
+		<md-fab-actions class="md-toolbar-tools">
+			<div ng-repeat="menupoint in menupoints" flex layout-align="center center" style="text-align: center;">
+				<md-button class="md-icon-button" ng-click="runAction(menupoint.action)" aria-label="{{ menupoint.alabel }}">
+					<i class="fa fa-{{ menupoint.icon }} fa-lg"></i>
+				</md-button>
+			</div>
+		</md-fab-actions>
+	</md-toolbar>
+		
+	<!--INCLUDES-->
+	<div ng-include="'searchbar.html'"></div>
+	<div ng-hide=true ng-include="'options.html'"></div>
+</div>

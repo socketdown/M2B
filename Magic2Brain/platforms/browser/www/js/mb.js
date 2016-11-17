@@ -1,68 +1,118 @@
 function MenuBar(){
 	this.make = makeMenuBar;
-
 }
 
 var file_reader_data;
-
+var isOptions = true;
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http) {
+	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog) {
 		$scope.isOpen = false;
 
-		$scope.demo = {
-		isOpen: false,
-		count: 0,
-		selectedDirection: 'left'
+		//Custom errormessage ->> call with $scope.errorMessage(<your error description here>);
+		$scope.errorMessage = function(errorcode) {
+			$mdDialog.show(
+				$mdDialog.alert()
+					.clickOutsideToClose(true)
+					.title('Oops!')
+					.textContent('It looks like something got butched there. I`m apparently caused by: '+errorcode)
+					.ariaLabel('ErrorMessage')
+					.ok('Understood')
+					// You can specify either sting with query selector
+					.openFrom('#left')
+					// or an element
+					.closeTo(angular.element(document.querySelector('#right')))
+			);
 		};
+		//Buttons for the (Top) Menubar
 		
 		var buttons = [
-			{ icon: 'bars', color: '#ffffff', size: '', alabel: 'Menu', action: 'toggleSide'},
-			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: ''},
-			{ icon: 'hdd-o', color: '#ffffff', size: '', alabel: 'View Cached files', action: ''},
-			{ icon: 'share', color: '#ffffff', size: '', alabel: 'Export', action: ''}
+			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'loadSearch'},
+			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: 'loadLastSeen'},
+			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: 'loadFavorite'},
+			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: 'loadOptions'}
 		];
 		
 		$scope.menupoints = [].concat(buttons);
 		
-		var img_path = 'img/deck_icon.png';
-		
-		/*$http.get('content/offline_sets/LEA.json').success(function(data) {
-		   $scope.deck_lea = data;
-		});*/
-		
-		var decks_data = [
-			{ picture: img_path, name: 'Inistrad', game_type: 'Modern - 200+ cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Kaladesch', game_type: 'Modern - 160 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Dunkelmond', game_type: 'Modern - 70 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'},
-			{ picture: img_path, name: 'Standart', game_type: 'Modern - 365 cards', deck_synopsis: 'Die letzte Verteidigung Innistrads ist verschwunden...', db_file: 'LEA.json'}
-		];
-		
-		$scope.decklist = [].concat(decks_data);
-		
 		$scope.toggleSide = function(){
 			$mdSidenav('left').toggle();
-		}
+		}	
 		
 		$scope.runAction = function(command){
-			if(command === 'toggleSide'){
+			var element = document.getElementById("content-wraper");
+			if(command === 'loadSearch'){
 				$scope.toggleSide();
+			}
+			else if(command=== 'loadOptions'){
+				isOptions=false;
+				console.log("triggered");			
 			}
 		}
 		
+		//Load LRU Decklist
+		
+		$scope.lastUsedDecks;
+		$scope.loadLastUsedDecks = function(){
+			var list = window.localStorage.getItem("lru_decklist");
+			if(list == undefined){
+				window.localStorage.setItem("lru_decklist", "");
+				list = [];
+			}
+			else{
+				list = JSON.parse(list);
+			}
+			$scope.lastUsedDecks = list;
+		}
+		$scope.updateLastUsedDecks = function(code){
+			var deck = $scope.lastUsedDecks;
+			if(deck.length > 5){
+				deck.splice(-1,1);
+			}
+			var compiled = JSON.stringify(deck);
+			window.localStorage.setItem("lru_decklist", compiled);
+		}
+		
+		$scope.loadLastUsedDecks();
+		
+		//Load Set (Loads a specific set of cards to main list)
 		var setdata;
 
-		$scope.loadSet = function() {
+		$scope.cards;
+		$scope.decks;
+
+		$scope.loadSet = function(code) {
+
+			$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
+				
+				$scope.cards = data.cards;
+			}).error(function (data, status) {
+				$scope.errorMessage("File Request Failed ["+status+"]");
+            });
 			
-			$scope.cards;
+			$scope.lastUsedDecks.unshift(code);
+			$scope.updateLastUsedDecks();
 			
-			$http.get('content/offline_sets/LEA.json').success(function(data){
-				setdata = data;
-				alert(typeof(data));
-				alert(data.size());
-				//$scope.cards = JSON.parse(data.replace(/\\'/g, "'"));
-			});
-			
-			dump($scope.cards);
+			$scope.toggleSide();
+		}
+		
+		//Load Deck loads a list of avaiable decks to the sidebar
+		
+		$scope.loadDecks = function() {
+
+			$http.get('content/SetList.json').success(function(data, status){
+				
+				$scope.decks = data;
+			}).error(function (data, status) {
+				$scope.errorMessage("File Request Failed ["+status+"]");
+            });
+		}
+		
+		$scope.loadDecks();
+		
+		//Loads Images for the specific deck (to display in sidebar)
+		
+		$scope.getImage = function(code){
+			return 'img/deck_icon.png';
 		}
 		
 	});
