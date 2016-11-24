@@ -28,7 +28,7 @@ function makeMenuBar(ajapp){
 		var buttons = [
 			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'loadSearch'},
 			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: 'loadLastSeen'},
-			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: 'loadFavorite'},
+			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Favorites', action: 'loadFavorite'},
 			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: 'loadOptions'}
 		];
 		
@@ -39,12 +39,26 @@ function makeMenuBar(ajapp){
 		}	
 		
 		$scope.runAction = function(command){
-			var element = document.getElementById("content-wraper");
+			//var element = document.getElementById("content-wraper");
+
+			$scope.isOptionScreen = false;
+			$scope.isCardPreviewScreen = false;
+			$scope.isFavoriteScreen = false;
+			$scope.isGreetingScreen = false;
+			$scope.isLastSeenScreen = false;
+			
 			if(command === 'loadSearch'){
+				$scope.isCardPreviewScreen = true;
 				$scope.toggleSide();
 			}
 			else if(command=== 'loadOptions'){
-				$scope.toggleOptionPage();			
+				$scope.isOptionScreen = true;
+			}
+			else if(command=== 'loadLastSeen'){
+				$scope.isLastSeenScreen = true;
+			}
+			else if(command=== 'loadFavorite'){
+				$scope.isFavoriteScreen = true;
 			}
 		}
 		
@@ -137,15 +151,8 @@ function makeMenuBar(ajapp){
 		
 		$scope.isOptionScreen = false;
 		$scope.isCardPreviewScreen = true;
-		$scope.isFavouritesScreen = false;
+		$scope.isFavoritesScreen = false;
 		$scope.isGreetingScreen = false;
-		
-		$scope.toggleOptionPage = function(){
-			
-			$scope.isOptionScreen = true;
-			$scope.isCardPreviewScreen = false;
-			$scope.isFavouritesScreen = false;
-			$scope.isGreetingScreen = false;
-		}
+		$scope.isLastSeenScreen = false;
 	});
 }
