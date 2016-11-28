@@ -1,15 +1,6 @@
-// Adding the JS-Loader
-jQuery.loadScript = function (url, callback) {
-    jQuery.ajax({
-        url: url,
-        dataType: 'script',
-        success: callback,
-        async: true
-    });
-}
 
-// Test the JS-Loader	 
-$.loadScript('/js/test.js', function(){});
+// Test the JS-Loader	
+$.getScript("/js/test.js", function(){}); 
 
 function MenuBar(){
 	this.make = makeMenuBar;
