@@ -1,3 +1,4 @@
+// Adding the JS-Loader
 jQuery.loadScript = function (url, callback) {
     jQuery.ajax({
         url: url,
@@ -6,7 +7,10 @@ jQuery.loadScript = function (url, callback) {
         async: true
     });
 }
-	 $.loadScript('/js/test.js', function(){});
+
+// Test the JS-Loader	 
+$.loadScript('/js/test.js', function(){});
+
 function MenuBar(){
 	this.make = makeMenuBar;
 }
@@ -85,6 +89,7 @@ function makeMenuBar(ajapp){
 			}
 			$scope.lastUsedDecks = list;
 		}
+		
 		$scope.updateLastUsedDecks = function(code){
 			var deck = $scope.lastUsedDecks;
 			if(deck.length > 5){
