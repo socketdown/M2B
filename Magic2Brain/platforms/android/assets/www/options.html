@@ -1,3 +1,33 @@
 <md-content>
 	<h1>OPTIONS</h1>
+
+	<md-content>
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="Appearance">
+				<md-content class="md-padding">
+					<h1 class="md-display-2">Apperance</h1>
+					<md-switch ng-model="data.cb1" aria-label="Switch 1">
+						Switch 1: {{ data.cb1 }}
+					</md-switch>
+				</md-content>
+			</md-tab>
+			<md-tab label="Update">
+				<md-content class="md-padding">
+					<h1 class="md-display-2">Download</h1>
+					<h2>Currently downloaded patches:</h2>
+					<h2>Card Image Packs</h2>
+					<p>Currently 0 installed (0.00GB Space taken)</p>
+					<md-button>Download all Image packs</md-button>
+					<md-button>Select image packs for download</md-button>
+				</md-content>
+			</md-tab>
+			<md-tab label="About">
+				<md-content class="md-padding">
+					<h1 class="md-display-2"></h1>
+					<p>Copyright (c) 2016 420Blazeit co. ltd.</p>
+				</md-content>
+			</md-tab>
+		</md-tabs>
+	</md-content>
+
 </md-content>
