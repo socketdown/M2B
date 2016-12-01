@@ -1,3 +1,103 @@
+<div ng-controller="OptionController" ng-cloak>
 <md-content>
-	<h1>OPTIONS</h1>
+	<md-tabs md-dynamic-height md-border-bottom>
+		<md-tab label="Appearance">
+			<md-content class="md-padding">
+				<h1 class="md-display-2">Appereance</h1>
+				<md-switch ng-model="data.cb1" aria-label="Switch 1">
+					Switch 1: {{ data.cb1 }}
+				</md-switch>
+			</md-content>
+		</md-tab>
+		<md-tab label="Update">
+			<md-content class="md-padding">
+				<md-card>
+					<md-card-title>
+						<md-card-title-text>
+							<span class="md-headline">Image Caching options</span>
+							<span class="md-subhead">Downloading Image Packs speeds up the display time for each card but uses more storage space.</span>
+						</md-card-title-text>
+					</md-card-title>
+
+					<md-card-content>
+						<div layout="row" layout-align="space-between right">
+							<md-checkbox ng-model="cb1" aria-label="Checkbox 1">
+								Enable Caching
+							</md-checkbox>
+						</div>
+
+						<div layout="row" layout-align="space-between right">
+							<span>Install Packs</span>
+							<p>Currently 0 installed (0.00GB Space taken)</p>
+							<md-checkbox aria-label="Checkbox 2" ng-disabled="!data.cb1">Select All</md-checkbox>
+						</div>
+
+						<div layout="row" layout-align="space-between center">
+							<span>Check for updates</span>
+							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled=="!data.cb1">
+							<md-option value="startup">At every startup</md-option>
+							<md-option value="daily">Daily</md-option>
+							<md-option value="weekly">Every Week</md-option>
+							<md-option value="monthly">Every Month</md-option>
+							<md-option value="never">Never</md-option>
+							</md-select>
+						</div>
+					</md-card-content>
+				</md-card>
+				<md-card>
+					<md-card-title>
+						<md-card-title-text>
+							<span class="md-headline">Card Pack options</span>
+							<span class="md-subhead">All Card packs are stored by default on your local sorage to improve your learning experience.</span>
+						</md-card-title-text>
+					</md-card-title>
+
+					<md-card-content>
+						<div layout="row" layout-align="space-between right">
+							<md-checkbox ng-model="data.cb2" aria-label="Checkbox 1">
+								Enable Autoupdate
+							</md-checkbox>
+						</div>
+
+						<div layout="row" layout-align="space-between center">
+							<span>Check for updates</span>
+							<md-select ng-model="pack_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled="!data.cb2">
+							<md-option value="daily">Daily</md-option>
+							<md-option value="weekly">Every Week</md-option>
+							<md-option value="monthly">Every Month</md-option>
+							</md-select>
+						</div>
+					</md-card-content>
+				</md-card>
+				<md-card>
+					<md-card-title>
+						<md-card-title-text>
+							<span class="md-headline">App Patching</span>
+							<span class="md-subhead">Installing avaiable patches makes this app more stable.</span>
+						</md-card-title-text>
+					</md-card-title>
+
+					<md-card-content>
+						<div layout="row" layout-align="space-between center">
+							<md-checkbox ng-model="data.cb3" aria-label="Checkbox 3">
+								Enable Autoupdate
+							</md-checkbox>
+						</div>
+
+						<div layout="row" layout-align="space-between center">
+							<md-button>Install Avaiable Patches</md-button>
+							<md-button class="md-warn">Install Patch from custom source</md-button>
+						</div>
+					</md-card-content>
+				</md-card>
+			</md-content>
+		</md-tab>
+		<md-tab label="About">
+			<md-content class="md-padding">
+				<h1 class="md-display-2"></h1>
+				<p>Copyright (c) 2016 420Blazeit co. ltd.</p>
+			</md-content>
+		</md-tab>
+	</md-tabs>
 </md-content>
+<div>

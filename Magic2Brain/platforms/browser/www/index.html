@@ -53,6 +53,7 @@
 	<!-- Local Documents to be included -->
 		<script type="text/javascript" src="js/functionLib.js"></script>
 		<script type="text/javascript" src="js/mb.js"></script>
+		<script type="text/javascript" src="js/factory.js"></script>
 
 		<script type="text/javascript">
 			app.initialize();			
@@ -61,12 +62,14 @@
 			var mb = new MenuBar();
 			mb.make(ajapp);
 			
-			vib();
+			//vib();
 			
 			function vib(){
 				navigator.vibrate(1000);
 			}
 		</script>
+		
+		<script type="text/javascript" src="js/optionHandler.js"></script>
 		
     <title>Magic2Brain</title>
 </head>

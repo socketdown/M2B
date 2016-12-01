@@ -1,8 +1,9 @@
+<div ng-controller="OptionController" ng-cloak>
 <md-content>
 	<md-tabs md-dynamic-height md-border-bottom>
 		<md-tab label="Appearance">
 			<md-content class="md-padding">
-				<h1 class="md-display-2">Apperance</h1>
+				<h1 class="md-display-2">Appereance</h1>
 				<md-switch ng-model="data.cb1" aria-label="Switch 1">
 					Switch 1: {{ data.cb1 }}
 				</md-switch>
@@ -20,7 +21,7 @@
 
 					<md-card-content>
 						<div layout="row" layout-align="space-between right">
-							<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+							<md-checkbox ng-model="cb1" aria-label="Checkbox 1">
 								Enable Caching
 							</md-checkbox>
 						</div>
@@ -54,13 +55,13 @@
 					<md-card-content>
 						<div layout="row" layout-align="space-between right">
 							<md-checkbox ng-model="data.cb2" aria-label="Checkbox 1">
-								Enable Autoupdate:
+								Enable Autoupdate
 							</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between center">
 							<span>Check for updates</span>
-							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled="!data.cb2">
+							<md-select ng-model="pack_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled="!data.cb2">
 							<md-option value="daily">Daily</md-option>
 							<md-option value="weekly">Every Week</md-option>
 							<md-option value="monthly">Every Month</md-option>
@@ -79,13 +80,13 @@
 					<md-card-content>
 						<div layout="row" layout-align="space-between center">
 							<md-checkbox ng-model="data.cb3" aria-label="Checkbox 3">
-								Enable Autoupdate:
+								Enable Autoupdate
 							</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between center">
 							<md-button>Install Avaiable Patches</md-button>
-							<md-button>Install Patch from custom source</md-button>
+							<md-button class="md-warn">Install Patch from custom source</md-button>
 						</div>
 					</md-card-content>
 				</md-card>
@@ -99,3 +100,4 @@
 		</md-tab>
 	</md-tabs>
 </md-content>
+<div>
