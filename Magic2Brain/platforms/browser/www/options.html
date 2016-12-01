@@ -21,19 +21,19 @@
 					<md-card-content>
 						<div layout="row" layout-align="space-between right">
 							<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-								Enable Caching: {{ data.cb1 }}
+								Enable Caching
 							</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between right">
 							<span>Install Packs</span>
-							<span>Currently 0 installed (0.00GB Space taken)</span>
-							<md-checkbox aria-label="Checkbox 2" md-enable="!data.cb1">Select All</md-checkbox>
+							<p>Currently 0 installed (0.00GB Space taken)</p>
+							<md-checkbox aria-label="Checkbox 2" ng-disabled="!data.cb1">Select All</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between center">
 							<span>Check for updates</span>
-							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" md-enable="!data.cb1">
+							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled=="!data.cb1">
 							<md-option value="startup">At every startup</md-option>
 							<md-option value="daily">Daily</md-option>
 							<md-option value="weekly">Every Week</md-option>
@@ -54,13 +54,13 @@
 					<md-card-content>
 						<div layout="row" layout-align="space-between right">
 							<md-checkbox ng-model="data.cb2" aria-label="Checkbox 1">
-								Enable Autoupdate: {{ data.cb1 }}
+								Enable Autoupdate:
 							</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between center">
 							<span>Check for updates</span>
-							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" md-enable="!data.cb2">
+							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled="!data.cb2">
 							<md-option value="daily">Daily</md-option>
 							<md-option value="weekly">Every Week</md-option>
 							<md-option value="monthly">Every Month</md-option>
@@ -79,7 +79,7 @@
 					<md-card-content>
 						<div layout="row" layout-align="space-between center">
 							<md-checkbox ng-model="data.cb3" aria-label="Checkbox 3">
-								Enable Autoupdate: {{ data.cb3 }}
+								Enable Autoupdate:
 							</md-checkbox>
 						</div>
 
