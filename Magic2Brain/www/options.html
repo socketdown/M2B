@@ -12,6 +12,10 @@
 		<md-tab label="Update">
 			<md-content class="md-padding">
 				<md-card>
+				<div class="container">
+					<md-progress-linear md-mode="buffer" value="12" md-buffer-value="16" ng-disabled="pbar1"></md-progress-linear>
+				</div>
+				<div class="bottom-block">
 					<md-card-title>
 						<md-card-title-text>
 							<span class="md-headline">Image Caching options</span>
@@ -28,10 +32,6 @@
 
 						<div layout="row" layout-align="space-between right">
 							<span>Install Packs</span>
-						</div>
-
-						<div layout="row" layout-align="space-between right">
-							<md-progress-linear class="md-warn" md-mode="buffer" value="12" md-buffer-value="16" ng-disabled="false"></md-progress-linear>
 						</div>
 
 						<div layout="row" layout-align="space-between right">
@@ -53,8 +53,13 @@
 							</md-select>
 						</div>
 					</md-card-content>
+				</div>
 				</md-card>
 				<md-card>
+				<div class="container">
+					<md-progress-linear md-mode="indeterminate" value="12" ng-disabled="false"></md-progress-linear>
+				</div>
+				<div class="bottom-block">
 					<md-card-title>
 						<md-card-title-text>
 							<span class="md-headline">Card Pack options</span>
@@ -99,6 +104,7 @@
 							<md-button class="md-warn">Install Patch from custom source</md-button>
 						</div>
 					</md-card-content>
+				</div>
 				</md-card>
 			</md-content>
 		</md-tab>
