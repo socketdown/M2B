@@ -12,6 +12,10 @@
 		<md-tab label="Update">
 			<md-content class="md-padding">
 				<md-card>
+				<div class="container">
+					<md-progress-linear md-mode="buffer" value="12" md-buffer-value="16" ng-disabled="pbar1"></md-progress-linear>
+				</div>
+				<div class="bottom-block">
 					<md-card-title>
 						<md-card-title-text>
 							<span class="md-headline">Image Caching options</span>
@@ -21,20 +25,26 @@
 
 					<md-card-content>
 						<div layout="row" layout-align="space-between right">
-							<md-checkbox ng-model="cb1" aria-label="Checkbox 1">
+							<md-checkbox ng-model="dloptions.caching" aria-label="Checkbox 1">
 								Enable Caching
 							</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between right">
 							<span>Install Packs</span>
+						</div>
+
+						<div layout="row" layout-align="space-between right">
 							<p>Currently 0 installed (0.00GB Space taken)</p>
-							<md-checkbox aria-label="Checkbox 2" ng-disabled="!data.cb1">Select All</md-checkbox>
+						</div>
+
+						<div layout="row" layout-align="space-between right">
+							<md-checkbox aria-label="Checkbox 2" md-indeterminate="true" ng-disabled="!dloptions.caching">Select All</md-checkbox>
 						</div>
 
 						<div layout="row" layout-align="space-between center">
 							<span>Check for updates</span>
-							<md-select ng-model="image_autoupdate" placeholder="Daily" class="md-no-underline" ng-disabled=="!data.cb1">
+							<md-select ng-model="dloptions.image_autoupdate" placeholder="{dloptions.image_autoupdate}" class="md-no-underline" ng-disabled="!dloptions.caching">
 							<md-option value="startup">At every startup</md-option>
 							<md-option value="daily">Daily</md-option>
 							<md-option value="weekly">Every Week</md-option>
@@ -43,8 +53,13 @@
 							</md-select>
 						</div>
 					</md-card-content>
+				</div>
 				</md-card>
 				<md-card>
+				<div class="container">
+					<md-progress-linear md-mode="indeterminate" value="12" ng-disabled="false"></md-progress-linear>
+				</div>
+				<div class="bottom-block">
 					<md-card-title>
 						<md-card-title-text>
 							<span class="md-headline">Card Pack options</span>
@@ -89,6 +104,7 @@
 							<md-button class="md-warn">Install Patch from custom source</md-button>
 						</div>
 					</md-card-content>
+				</div>
 				</md-card>
 			</md-content>
 		</md-tab>
