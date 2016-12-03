@@ -1,19 +1,19 @@
 ajapp.factory('Option', function(){
-	return { Options: '' };
+	return { };
 });
 
-ajapp.factory('MBar', function(){
-	return { Options: '' };
+ajapp.factory('MBar', function(){	
+	return { };
 });
 
 ajapp.factory('LastSeen', function(){
-	return { Options: '' };
+	return { };
 });
 
 ajapp.factory('Cards', function(){
-	return { Options: '' };
+	return { };
 });
 
-ajapp.factory('CurrentPages', function(){
-	return { CPages: '' };
+ajapp.factory('Pages', function(){
+	return { };
 });
