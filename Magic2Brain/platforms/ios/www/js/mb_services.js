@@ -32,14 +32,6 @@ ajapp.service('CardProvider', function(ErrorProvider, Cards, $http) {
 	}
 	
 	this.getDecks = function(){
-		//if (Cards.precache_setlist === undefined)
-		/*
-		$http.get('content/SetList.json').success(function(data, status){
-			
-			Cards.setlist_precache = data;
-		}).error(function (data, status) {
-			ErrorProvider.errorMessage("File Request Failed ["+status+"]");
-		});*/
 		return $http.get('content/SetList.json');
 	}
 	

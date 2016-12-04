@@ -5,7 +5,7 @@ function MenuBar(){
 var file_reader_data;
 var isOptions = true;
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider, SwitchPage, nukeService) {
+	ajapp.controller('MenuBarCtrl', function($scope, $timeout, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider, SwitchPage, nukeService) {
 		$scope.isOpen = false;
 		
 		//Menubar global interchangable variable init
@@ -89,9 +89,20 @@ function makeMenuBar(ajapp){
 		//Load Sets and Decks
 		
 		$scope.cards;
-		$scope.decks = CardProvider.getDecks();
+		$scope.decks;
 		
-		alert(CardProvider.getDecks());
+		CardProvider.getDecks().then(function(data){
+			$timeout(function(){
+				$scope.decks = data;
+			}, 0);
+		}).catch(function(data, status){
+			
+		});
+		
+		$scope.$watch('decks', function(){
+			alert($scope.decks);
+			
+		});
 		
 		/*
 		CardProvider.getDecks();
