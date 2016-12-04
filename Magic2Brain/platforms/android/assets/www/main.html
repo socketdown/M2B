@@ -11,8 +11,9 @@
 		
 	<!--INCLUDES-->
 	<div ng-include="'searchbar.html'"></div>
-	<div ng-if="isOptionScreen" ng-include="'options.html'"></div>
-	<div ng-if="isCardPreviewScreen" ng-include="'search.html'"></div>
-	<div ng-if="isFavoriteScreen" ng-include="'favorite.html'"></div>
-	<div ng-if="isLastSeenScreen" ng-include="'lastSeen.html'"></div>
+	<div ng-if="apag.isOptionScreen" ng-include="'options.html'"></div>
+	<div ng-if="apag.isCardPreviewScreen" ng-include="'search.html'"></div>
+	<div ng-if="apag.isFavoriteScreen" ng-include="'favorite.html'"></div>
+	<div ng-if="apag.isLastSeenScreen" ng-include="'lastSeen.html'"></div>
+	<!--<div ng-include="'quest.html'"></div>-->
 </div>

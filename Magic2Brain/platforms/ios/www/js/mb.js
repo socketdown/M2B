@@ -5,7 +5,7 @@ function MenuBar(){
 var file_reader_data;
 var isOptions = true;
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider) {
+	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider, SwitchPage, nukeService) {
 		$scope.isOpen = false;
 		
 		//Menubar global interchangable variable init
@@ -20,13 +20,8 @@ function makeMenuBar(ajapp){
 			
 			MBar.menupoints = [].concat(buttons);
 			
-			$scope.isOptionScreen = false;
-			$scope.isCardPreviewScreen = true;
-			$scope.isFavoritesScreen = false;
-			$scope.isGreetingScreen = false;
-			$scope.isLastSeenScreen = false;
-			
-			$scope.activePages = Pages.pages;
+			SwitchPage.init();
+			$scope.apag = Pages.pages;
 		}
 		
 		mb_init();
@@ -40,27 +35,26 @@ function makeMenuBar(ajapp){
 		}	
 		
 		$scope.runAction = function(command){
-
-			$scope.isOptionScreen = false;
-			$scope.isCardPreviewScreen = false;
-			$scope.isFavoriteScreen = false;
-			$scope.isGreetingScreen = false;
-			$scope.isLastSeenScreen = false;
 			
 			if(command === 'loadSearch'){
-				$scope.isCardPreviewScreen = true;
+				SwitchPage.set("isCardPreviewScreen");
 				$scope.toggleSide();
 			}
 			else if(command=== 'loadOptions'){
-				$scope.isOptionScreen = true;
+				SwitchPage.set("isOptionScreen");
 			}
 			else if(command=== 'loadLastSeen'){
-				$scope.isLastSeenScreen = true;
+				SwitchPage.set("isLastSeenScreen");
 			}
 			else if(command=== 'loadFavorite'){
-				$scope.isFavoriteScreen = true;
+				SwitchPage.set("isFavoriteScreen");
 			}
+			$scope.apag = Pages.pages;
 		}
+		
+		$scope.$watch(Pages.pages, function(){
+			$scope.apag = Pages.pages;
+		});
 		
 		function loadSearch(){
 			$scope.isCardPreviewScreen = true;
@@ -93,9 +87,22 @@ function makeMenuBar(ajapp){
 		$scope.loadLastUsedDecks();
 		
 		//Load Sets and Decks
-
+		
 		$scope.cards;
 		$scope.decks = CardProvider.getDecks();
+		
+		alert(CardProvider.getDecks());
+		
+		/*
+		CardProvider.getDecks();
+		alert(Cards.setlist_precache);
+		
+		$scope.$watch(function(Cards){ return Cards.setlist_precache; }, function($scope){
+			$scope.decks = Cards.setlist_precache;
+			alert("changed" + Cards.setlist_precache);
+		});
+		
+		*/
 
 		$scope.loadSet = function(code) {
 			$scope.cards = CardProvider.getCards(code);

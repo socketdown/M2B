@@ -1,4 +1,4 @@
-ajapp.controller('OptionController', function( $scope, Option, MBar, CurrentPages ) {
+ajapp.controller('OptionController', function( $scope, Option, MBar, Pages, SwitchPage) {
 	$scope.cb1 = true;
 	
 	$scope.appeareance = {};
@@ -12,7 +12,10 @@ ajapp.controller('OptionController', function( $scope, Option, MBar, CurrentPage
 	];
 
 	$scope.pbar1 = $scope.dloptions.caching;
-
+	
+	$scope.testswitch = function(){
+		SwitchPage.set("isLastSeenScreen");
+	}
 	/*
 	$scope.selectAllImagePacks = false;
 	if( $scope.selectAllImagePacks ){
@@ -20,16 +23,4 @@ ajapp.controller('OptionController', function( $scope, Option, MBar, CurrentPage
 			$scope.imagepacks.[i].selected = true;
 		}
 	}*/
-	
-	Option.engine = '
-
-
-'      ██████  ▒█████   ▄████▄   ██ ▄█▀▓█████▄▄▄█████▓▓█████▄  ▒█████   █     █░███▄    █ '+
-'    ▒██    ▒ ▒██▒  ██▒▒██▀ ▀█   ██▄█▒ ▓█   ▀▓  ██▒ ▓▒▒██▀ ██▌▒██▒  ██▒▓█░ █ ░█░██ ▀█   █ '+
-'    ░ ▓██▄   ▒██░  ██▒▒▓█    ▄ ▓███▄░ ▒███  ▒ ▓██░ ▒░░██   █▌▒██░  ██▒▒█░ █ ░█▓██  ▀█ ██▒'+
-'      ▒   ██▒▒██   ██░▒▓▓▄ ▄██▒▓██ █▄ ▒▓█  ▄░ ▓██▓ ░ ░▓█▄   ▌▒██   ██░░█░ █ ░█▓██▒  ▐▌██▒'+
-'    ▒██████▒▒░ ████▓▒░▒ ▓███▀ ░▒██▒ █▄░▒████▒ ▒██▒ ░ ░▒████▓ ░ ████▓▒░░░██▒██▓▒██░   ▓██░'+
-'    ▒ ▒▓▒ ▒ ░░ ▒░▒░▒░ ░ ░▒ ▒  ░▒ ▒▒ ▓▒░░ ▒░ ░ ▒ ░░    ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▓░▒ ▒ ░ ▒░   ▒ ▒ '+
-'    ░ ░▒  ░ ░  ░ ▒ ▒░   ░  ▒   ░ ░▒ ▒░ ░ ░  ░   ░     ░ ▒  ▒   ░ ▒ ▒░   ▒ ░ ░ ░ ░░   ░ ▒░'+
-'    ░  ░  ░  ░ ░ ░ ▒  ░        ░ ░░ ░    ░    ░       ░ ░  ░ ░ ░ ░ ▒    ░   ░    ░   ░ ░ '
 });

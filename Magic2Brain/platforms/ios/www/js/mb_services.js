@@ -33,28 +33,23 @@ ajapp.service('CardProvider', function(ErrorProvider, Cards, $http) {
 	
 	this.getDecks = function(){
 		//if (Cards.precache_setlist === undefined)
-		
+		/*
 		$http.get('content/SetList.json').success(function(data, status){
 			
-			return data;
+			Cards.setlist_precache = data;
 		}).error(function (data, status) {
 			ErrorProvider.errorMessage("File Request Failed ["+status+"]");
-		});
-
-		return "ERROR";
+		});*/
+		return $http.get('content/SetList.json');
 	}
 	
-	this.getCards = function(deck){
-		var cards = {name: "lul"};
+	this.getCards = function(code){
 		
 		$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
-			
-			return data.cards
+			Cards.data = data;
 		}).error(function (data, status) {
 			ErrorProvider.errorMessage("File Request Failed ["+status+"]");
 		});
-		
-		return "ERROR";
 	}
 });
 
@@ -74,4 +69,39 @@ ajapp.service('ErrorProvider', function($mdDialog){
 				.closeTo(angular.element(document.querySelector('#right')))
 		);
 	}
+});
+
+ajapp.service('SwitchPage', function(Pages){
+	this.reset = function(){
+		var pages = { isOptionScreen: false, isCardPreviewScreen: false, isFavoriteScreen: false, isGreetingScreen: false, isLastSeenScreen: false };
+		Pages.pages = pages;
+	}
+	
+	this.init = function(){
+		var pages = { isOptionScreen: false, isCardPreviewScreen: true, isFavoriteScreen: false, isGreetingScreen: false, isLastSeenScreen: false };
+		Pages.pages = pages;
+	}
+	
+	this.set = function(id){
+		this.reset();
+		Pages.pages[id] = true;
+	}
+});
+
+ajapp.factory('nukeService', function($rootScope, $http) {
+    var nukeService = {};
+
+    nukeService.data = {};
+
+    //Gets the list of nuclear weapons
+    nukeService.getNukes = function() {
+        $http.get('content/SetList.json')
+            .success(function(data) {
+                nukeService.data.nukes = data;
+            });
+
+        return nukeService.data;
+    };
+
+    return nukeService;
 });
