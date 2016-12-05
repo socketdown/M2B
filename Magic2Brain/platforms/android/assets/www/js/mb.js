@@ -5,47 +5,60 @@ function MenuBar(){
 var file_reader_data;
 var isOptions = true;
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $mdSidenav, $http, $mdDialog) {
+	ajapp.controller('MenuBarCtrl', function($scope, $timeout, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider, SwitchPage, nukeService) {
 		$scope.isOpen = false;
+		
+		//Menubar global interchangable variable init
+		
+		function mb_init(){
+			var buttons = [
+				{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'loadSearch'},
+				{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: 'loadLastSeen'},
+				{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Favorites', action: 'loadFavorite'},
+				{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: 'loadOptions'}
+			];
+			
+			MBar.menupoints = [].concat(buttons);
+			
+			SwitchPage.init();
+			$scope.apag = Pages.pages;
+		}
+		
+		mb_init();
 
-		//Custom errormessage ->> call with $scope.errorMessage(<your error description here>);
-		$scope.errorMessage = function(errorcode) {
-			$mdDialog.show(
-				$mdDialog.alert()
-					.clickOutsideToClose(true)
-					.title('Oops!')
-					.textContent('It looks like something got butched there. I`m apparently caused by: '+errorcode)
-					.ariaLabel('ErrorMessage')
-					.ok('Understood')
-					// You can specify either sting with query selector
-					.openFrom('#left')
-					// or an element
-					.closeTo(angular.element(document.querySelector('#right')))
-			);
-		};
 		//Buttons for the (Top) Menubar
 		
-		var buttons = [
-			{ icon: 'search', color: '#ffffff', size: '', alabel: 'Menu', action: 'loadSearch'},
-			{ icon: 'cloud-download', color: '#ffffff', size: '', alabel: 'Cache Files', action: 'loadLastSeen'},
-			{ icon: 'star', color: '#ffffff', size: '', alabel: 'View Cached files', action: 'loadFavorite'},
-			{ icon: 'gear', color: '#ffffff', size: '', alabel: 'Export', action: 'loadOptions'}
-		];
-		
-		$scope.menupoints = [].concat(buttons);
+		$scope.menupoints = MBar.menupoints;
 		
 		$scope.toggleSide = function(){
 			$mdSidenav('left').toggle();
 		}	
 		
 		$scope.runAction = function(command){
-			var element = document.getElementById("content-wraper");
+			
 			if(command === 'loadSearch'){
+				SwitchPage.set("isCardPreviewScreen");
 				$scope.toggleSide();
 			}
 			else if(command=== 'loadOptions'){
-				$scope.toggleOptionPage();			
+				SwitchPage.set("isOptionScreen");
 			}
+			else if(command=== 'loadLastSeen'){
+				SwitchPage.set("isLastSeenScreen");
+			}
+			else if(command=== 'loadFavorite'){
+				SwitchPage.set("isFavoriteScreen");
+			}
+			$scope.apag = Pages.pages;
+		}
+		
+		$scope.$watch(Pages.pages, function(){
+			$scope.apag = Pages.pages;
+		});
+		
+		function loadSearch(){
+			$scope.isCardPreviewScreen = true;
+			$scope.toggleSide();
 		}
 		
 		//Load LRU Decklist
@@ -53,7 +66,7 @@ function makeMenuBar(ajapp){
 		$scope.lastUsedDecks;
 		$scope.loadLastUsedDecks = function(){
 			var list = window.localStorage.getItem("lru_decklist");
-			if(list == undefined){
+			if(list === undefined){
 				window.localStorage.setItem("lru_decklist", "");
 				list = [];
 			}
@@ -73,79 +86,48 @@ function makeMenuBar(ajapp){
 		
 		$scope.loadLastUsedDecks();
 		
-		//Load Set (Loads a specific set of cards to main list)
-		var setdata;
-
+		//Load Sets and Decks
+		
 		$scope.cards;
 		$scope.decks;
+		
+		CardProvider.getDecks().then(function(data){
+			$timeout(function(){
+				$scope.decks = data;
+			}, 0);
+		}).catch(function(data, status){
+			
+		});
+		
+		$scope.$watch('decks', function(){
+			alert($scope.decks);
+			
+		});
+		
+		/*
+		CardProvider.getDecks();
+		alert(Cards.setlist_precache);
+		
+		$scope.$watch(function(Cards){ return Cards.setlist_precache; }, function($scope){
+			$scope.decks = Cards.setlist_precache;
+			alert("changed" + Cards.setlist_precache);
+		});
+		
+		*/
 
 		$scope.loadSet = function(code) {
-
-			$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
-				
-				$scope.cards = data.cards;
-			}).error(function (data, status) {
-				$scope.errorMessage("File Request Failed ["+status+"]");
-            });
-			
+			$scope.cards = CardProvider.getCards(code);
 			$scope.lastUsedDecks.unshift(code);
 			$scope.updateLastUsedDecks();
-			
 			$scope.toggleSide();
 		}
-		
-		//Load Deck loads a list of avaiable decks to the sidebar
-		
-		$scope.loadDecks = function() {
-
-			$http.get('content/SetList.json').success(function(data, status){
-				
-				$scope.decks = data;
-			}).error(function (data, status) {
-				$scope.errorMessage("File Request Failed ["+status+"]");
-            });
-		}
-		
-		$scope.loadDecks();
 		
 		//Loads Images for the specific deck (to display in sidebar)
 		
 		$scope.getManaImages = function(code){
-			if (code === null || code == "") {
-				return "";
-			}
-
-			var codes = code.replace(/{|}/g, "");
-			var paths = '{"W": "W.svg.png", "B": "B.svg.png", "C": "C.svg.png", "G": "G.svg.png", "R": "R.svg.png", "U": "U.svg.png"}';
-			paths = JSON.parse(paths);
-
-			var imageArray = [];
-
-			codes = codes.split("");
-
-			for (var i = 0; i < codes.length; i++) {
-				if (isNaN(codes[i]) == true) {
-					imageArray.push({"path":'img/' + paths[codes[i]], "isImage":true});
-				}
-				else{
-				imageArray.push({"path":codes[i], "isImage":false});
-				}
-			}
-
-			return imageArray;
+			return IconProvider.stringToManaIcon(code);
 		}
 		
-		$scope.isOptionScreen = false;
-		$scope.isCardPreviewScreen = true;
-		$scope.isFavouritesScreen = false;
-		$scope.isGreetingScreen = false;
-		
-		$scope.toggleOptionPage = function(){
-			
-			$scope.isOptionScreen = true;
-			$scope.isCardPreviewScreen = false;
-			$scope.isFavouritesScreen = false;
-			$scope.isGreetingScreen = false;
-		}
+		console.log(Option.engine);
 	});
 }

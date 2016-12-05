@@ -1,0 +1,23 @@
+<div id="QuizControllerID" ng-controller="QuizController" ng-cloak>
+	<md-content class="md-padding" layout-xs="column" layout="row" layout-align="center">
+		<div flex-xs flex-gt-xs="50" layout="column">
+			<md-card>
+				<img ng-src="{{cardimg}}" class="md-card-image" alt="Washed Out" layout-padding>
+				
+				
+				<md-card-title ng-show="name">
+					<md-card-title-text>
+						<span class="md-headline">What is the name of this Card?</span>
+					</md-card-title-text>
+				</md-card-title>
+				
+				
+				<md-input-container ng-show="name">
+					<input ng-model="user.title"></input>
+				</md-input-container>
+				
+				
+				<md-button ng-click="answer()">Answer</md-button>
+			</md-card>
+	</md-content>
+<div>
