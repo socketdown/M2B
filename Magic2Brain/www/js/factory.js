@@ -22,7 +22,7 @@ ajapp.factory('LastSeen', function(){
 });
 
 ajapp.factory('Cards', function(){
-	return { };
+	return { cache: {} };
 });
 
 ajapp.factory('Pages', function(){

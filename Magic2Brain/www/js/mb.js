@@ -5,7 +5,7 @@ function MenuBar(){
 var file_reader_data;
 var isOptions = true;
 function makeMenuBar(ajapp){
-	ajapp.controller('MenuBarCtrl', function($scope, $timeout, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, CardProvider, SwitchPage, nukeService) {
+	ajapp.controller('MenuBarCtrl', function($scope, $timeout, $mdSidenav, $http, $mdDialog, Option, MBar, LastSeen, Pages, Cards, IconProvider, ErrorProvider, SwitchPage) {
 		$scope.isOpen = false;
 		
 		//Menubar global interchangable variable init
@@ -66,7 +66,7 @@ function makeMenuBar(ajapp){
 		$scope.lastUsedDecks;
 		$scope.loadLastUsedDecks = function(){
 			var list = window.localStorage.getItem("lru_decklist");
-			if(list === undefined){
+			if(list == null){
 				window.localStorage.setItem("lru_decklist", "");
 				list = [];
 			}
@@ -91,32 +91,29 @@ function makeMenuBar(ajapp){
 		$scope.cards;
 		$scope.decks;
 		
-		CardProvider.getDecks().then(function(data){
-			$timeout(function(){
-				$scope.decks = data;
-			}, 0);
-		}).catch(function(data, status){
-			
+		$http.get('content/SetList.json').success(function(data, status){
+			$scope.decks = data;
+			Cards.setlist = data;
+		}).error(function (data, status) {
+			ErrorProvider.errorMessage("File Request Failed ["+status+"]");
 		});
-		
-		$scope.$watch('decks', function(){
-			alert($scope.decks);
-			
-		});
-		
-		/*
-		CardProvider.getDecks();
-		alert(Cards.setlist_precache);
-		
-		$scope.$watch(function(Cards){ return Cards.setlist_precache; }, function($scope){
-			$scope.decks = Cards.setlist_precache;
-			alert("changed" + Cards.setlist_precache);
-		});
-		
-		*/
 
+		
+		
 		$scope.loadSet = function(code) {
-			$scope.cards = CardProvider.getCards(code);
+
+			if(typeof Cards.cache[code] == 'undefined'){
+				$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
+					Cards.cache[code] = data.cards;
+					$scope.cards = data.cards;
+				}).error(function (data, status) {
+					ErrorProvider.errorMessage("File Request Failed ["+status+"]");
+				});
+			}
+			else{
+				$scope.cards = Cards.cache[code];
+			}
+
 			$scope.lastUsedDecks.unshift(code);
 			$scope.updateLastUsedDecks();
 			$scope.toggleSide();

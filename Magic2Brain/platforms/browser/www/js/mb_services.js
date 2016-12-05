@@ -25,26 +25,6 @@ ajapp.service('IconProvider', function() {
 	}
 });
 
-ajapp.service('CardProvider', function(ErrorProvider, Cards, $http) {
-	this.getSetList = function(){
-		
-		return {};
-	}
-	
-	this.getDecks = function(){
-		return $http.get('content/SetList.json');
-	}
-	
-	this.getCards = function(code){
-		
-		$http.get('content/offline_sets/'+code+'.json').success(function(data, status){
-			Cards.data = data;
-		}).error(function (data, status) {
-			ErrorProvider.errorMessage("File Request Failed ["+status+"]");
-		});
-	}
-});
-
 ajapp.service('ErrorProvider', function($mdDialog){
 	this.errorMessage = function(message){
 		vibrate();
